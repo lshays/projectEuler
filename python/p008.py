@@ -3,8 +3,8 @@
 # p008numbers.txt contains the numbers to be used for this problem
 
 
-def getString():
-    with open("p008numbers.txt", 'r') as file:
+def getString(filename):
+    with open(filename, 'r') as file:
         myString = ""
         for line in file.read():
             myString += line.strip()
@@ -25,5 +25,5 @@ def maxProductAdjacent(numbers, length):
 
 
 if __name__ == "__main__":
-    numberString = getString()
+    numberString = getString("p008.txt")
     print maxProductAdjacent(numberString, 13)
