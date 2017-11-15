@@ -60,7 +60,7 @@ def getNextAdjacent(graph, r, c, d):
 
 
 if __name__ == "__main__":
-    graph = readGrid("p011grid.txt")
+    graph = readGrid("p011.txt")
     maxProduct = 0
     directions = ["right", "left", "upper right", "lower right", "upper left",
                   "lower left", "up", "down"]
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 c2 = c
                 product = 1
                 for i in range(4):
-                    product *= getNextAdjacent(graph, r, c, d)
+                    product *= getNextAdjacent(graph, r2, c2, d)
                     if d == "right":
                         c2 += 1
                     elif d == "left":
@@ -90,7 +90,7 @@ if __name__ == "__main__":
                         r2 -= 1
                     elif d == "up":
                         r2 += 1
-                    else
+                    else:
                         r2 -= 1
                 if product > maxProduct:
                     maxProduct = product
