@@ -7,38 +7,34 @@
 
 # It is known that 1 and 41 produce 40 consecutive primes
 
-aa = 1
-bb = 41
-con = 40
+
+def isPrime(n):
+    if n < 0:
+        return False
+    for i in range(2, int(n**0.5)+1):
+        if n % i == 0:
+            return False
+    return True
 
 
-def primeSieve():
-    p = 2
-    d = {}
-    while True:
-        if p not in d:
-            yield p
-            d[p**2] = [p]
-        else:
-            for x in d[p]:
-                d.setdefault(p+x, []).append(x)
-                del d[p]
-        p += 1
+aS = range(-999, 1000)
+bS = range(1, 1000, 2)
+mySet = set()
 
+for a in aS:
+    for b in bS:
+        mySet.add((a, b))
 
-gen = primeSieve()
-primeList = [next(gen)]
-for a in range(-999, 1000):
-    for b in range(-999, 1000, 2):
-        n = 0
-        product = n**2 + a*n + b
-        while product > primeList[len(primeList)-1]:
-            primeList.append(next(gen))
-        while product in primeList:
-            n += 1
-            product = n**2 + a*n + b
-        if n+1 > con:
-            con = n+1
-            aa = a
-            bb = b
-print aa, bb, aa*bb
+n = 0
+while len(mySet) > 1:
+    tempSet = set()
+    for a, b in mySet:
+        num = n**2 + a*n + b
+        if not isPrime(num):
+            tempSet.add((a, b))
+    mySet = mySet - tempSet
+    n += 1
+
+answer = mySet.pop()
+print answer, "=", answer[0] * answer[1]
+print n, "consecutive primes"
