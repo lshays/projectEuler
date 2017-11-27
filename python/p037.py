@@ -16,7 +16,7 @@ def truncatable(n, primeList):
     prime = str(n)
     if len(prime) <= 1:
         return False
-    for i in range(len(prime)):
+    for i in range(1, len(prime)):
         if int(prime[i:]) not in primeList:
             return False
         if int(prime[:len(prime)-i]) not in primeList:
@@ -25,11 +25,12 @@ def truncatable(n, primeList):
         
 
 truncPrimes = []
-primes = []
+primes = set()
 gen = primeSieve()
+
 while len(truncPrimes) < 11:
     prime = next(gen)
-    primes.append(prime)
+    primes.add(prime)
     if truncatable(prime, primes):
         truncPrimes.append(prime)
 
