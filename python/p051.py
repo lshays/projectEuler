@@ -35,14 +35,26 @@ def permGen(s):
 
 
 gen = primeGen()
-while next(gen) < 50000:
-    pass
+primeSet = set()
+primeSet.add(next(gen))
+while max(primeSet) < 100000:
+    primeSet.add(next(gen))
 
 
 nonPrimes = 0
+reset = False
+gen = primeGen()
+l = 1000
 while True: 
     prime = str(next(gen))
+    if l < len(prime):
+        reset = True
+    else:
+        reset = False
+    l = len(prime)
     print prime
+    if reset:
+        primeSet = set([x for x in  primeSet if len(str(x)) == len(str(prime))])
     for i in range(1, len(prime)):
         for perm in permGen(starString(prime, i)):
             if perm[-1] == "x":
@@ -52,7 +64,7 @@ while True:
                 for c in range(len(myString)):
                     if myString[c] == "*":
                         myString = myString.replace("*", prime[c], 1)
-                if not isPrime(int(myString)):
+                if int(myString) not in primeSet or myString[0] == "0": 
                     nonPrimes += 1
                 if nonPrimes > 3:
                     break
