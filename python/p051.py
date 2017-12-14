@@ -1,5 +1,16 @@
 import sys
 
+# Initially I got an answer of 120383. This prime turns into *2*3*3,
+# which leads to the correct answer of 121313. However, I would suggest
+# a rewording of the problem. Technically, 120383 is the lowest prime 
+# that can have certain digits replaced with the same number yielding
+# a family of 8+ primes.
+#
+# *** It is not part of the family itself though ***
+#
+# This confused me initially and if I had known that going in I think
+# I would have been able to find a more elegant, efficient solution.
+
 def primeGen():
     p = 2
     d = {}
@@ -35,40 +46,38 @@ def permGen(s):
 
 
 gen = primeGen()
-primeSet = set()
-primeSet.add(next(gen))
-while max(primeSet) < 100000:
-    primeSet.add(next(gen))
-
-
-nonPrimes = 0
-reset = False
-gen = primeGen()
-l = 1000
-while True: 
+while next(gen) < 97:
+    pass
+while True:
     prime = str(next(gen))
-    if l < len(prime):
-        reset = True
-    else:
-        reset = False
-    l = len(prime)
-    print prime
-    if reset:
-        primeSet = set([x for x in  primeSet if len(str(x)) == len(str(prime))])
-    for i in range(1, len(prime)):
-        for perm in permGen(starString(prime, i)):
-            if perm[-1] == "x":
-                continue
-            for x in map(str, range(0, 10)):
-                myString = perm.replace("x", x) 
-                for c in range(len(myString)):
-                    if myString[c] == "*":
-                        myString = myString.replace("*", prime[c], 1)
-                if int(myString) not in primeSet or myString[0] == "0": 
-                    nonPrimes += 1
-                if nonPrimes > 3:
-                    break
-            if nonPrimes <= 3:
-                print "Answer =", prime
-                sys.exit()
+    print "Testing:", prime
+    for i in range(len(prime)-1):
+        starStr = starString(prime[0:-1], i)
+        permSet = set()
+        for perm in permGen(starStr):
+            permSet.add(perm)
+        for perm in permSet:
+            myString = ""
+            for c in range(len(perm)):
+                if perm[c] == "*":
+                    myString += "*"
+                else:
+                    myString += prime[c]
+            myString += prime[-1]
             nonPrimes = 0
+            pl = []
+            for i in range(10):
+                primeString = myString.replace("*", str(i))
+                if primeString[0] == "0":
+                    nonPrimes += 1
+                    continue
+                if not isPrime(int(primeString)):
+                    nonPrimes += 1
+                    if nonPrimes > 2:
+                        break
+                else:
+                    pl.append(primeString)
+            if nonPrimes <= 2:
+                print "ANSWER =", pl[0] 
+                print "(" + myString + ")", "--->", pl
+                sys.exit()
